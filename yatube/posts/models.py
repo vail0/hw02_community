@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.forms import DateTimeField
 
 # Create your models here.
 
