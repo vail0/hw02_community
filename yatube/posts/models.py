@@ -1,4 +1,5 @@
 from cgitb import text
+from enum import unique
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.forms import DateTimeField
@@ -8,8 +9,8 @@ from django.forms import DateTimeField
 User = get_user_model()
 
 class Group(models.Model):
-    title = models.CharField(max_length = 100)
-    slug = models.SlugField()
+    title = models.CharField(max_length = 200)
+    slug = models.SlugField(unique=True)
     description = models.TextField()
     def __str__(self) -> str:
         return self.title
