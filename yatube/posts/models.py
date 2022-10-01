@@ -1,5 +1,3 @@
-from cgitb import text
-from enum import unique
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.forms import DateTimeField
@@ -8,12 +6,15 @@ from django.forms import DateTimeField
 
 User = get_user_model()
 
+
 class Group(models.Model):
-    title = models.CharField(max_length = 200)
+    title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField()
+
     def __str__(self) -> str:
         return self.title
+
 
 class Post(models.Model):
     text = models.TextField()
@@ -21,11 +22,11 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name = 'posts'
+        related_name='posts'
     )
     group = models.ForeignKey(
         Group,
-        blank = True,
-        null = True,
-        on_delete = models.CASCADE
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
     )
