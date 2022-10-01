@@ -10,7 +10,6 @@ def index(request):
         'posts': posts,
     }
     return render(request, template, context)
-#    return HttpResponse('Главная страница')
 
 
 def group_posts(request, slug):
