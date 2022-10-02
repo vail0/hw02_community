@@ -6,12 +6,10 @@
 {% endblock %}
 
 {% block content %}
-        <!-- класс py-5 создает отступы сверху и снизу блока -->
-        <div class="container py-5">     
-          <h1>Последние обновления на сайте</h1>
-          {% for post in posts %}
-              {% include 'includes/post_card.html' %}
-          {% endfor %}
-          <!-- под последним постом нет линии -->
-        </div>
+  <div class="container py-5">     
+    <h1>Последние обновления на сайте</h1>
+    {% for post in posts %}
+      {% include 'includes/post_card.html' %}
+    {% endfor %}
+  </div>
 {% endblock %}
