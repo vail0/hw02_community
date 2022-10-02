@@ -15,7 +15,7 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.filter(group=group).all()[:settings.AMOUNT]
+    posts = Post.objects.filter(group=group)[:settings.AMOUNT]
     template = 'posts/group_list.html'
     context = {
         'group': group,
