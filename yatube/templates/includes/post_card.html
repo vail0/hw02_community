@@ -10,10 +10,8 @@
     <p>
       {{post.text}}
     </p>
-    {% if not group %}
-        {% if post.group %}
-            <a href="{% url 'posts:group_list' 'mygroup' %}">все записи группы</a>
-        {% endif %}
+    {% if post.group and not group %}
+        <a href="{% url 'posts:group_list' 'mygroup' %}">все записи группы</a>
     {% endif %}
 </article>
 {% if not forloop.last %}<hr>{% endif %}
