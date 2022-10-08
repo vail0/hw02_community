@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
-    'about.apps.AboutConfg',
 ]
 
 MIDDLEWARE = [
