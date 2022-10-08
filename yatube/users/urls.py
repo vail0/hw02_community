@@ -1,6 +1,12 @@
 # users/urls.py
 
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import (LoginView, LogoutView,
+                                       PasswordChangeDoneView,
+                                       PasswordChangeView,
+                                       PasswordResetCompleteView,
+                                       PasswordResetConfirmView,
+                                       PasswordResetDoneView,
+                                       PasswordResetView)
 from django.urls import path
 
 from . import views
@@ -29,41 +35,41 @@ urlpatterns = [
     # Смена пароля
     path(
         'password_change/',
-        views.PasswordChangeView.as_view(),
+        PasswordChangeView.as_view('users/password_change_form.html'),
         name='password_change'
     ),
 
     # Сообщение об успешном изменении пароля
     path(
         'password_change/done/',
-        views.PasswordChangeDoneView.as_view(),
+        PasswordChangeDoneView.as_view('users/password_change_done.html'),
         name='password_change_done'
     ),
 
     # Восстановление пароля
     path(
         'password_reset/',
-        views.PasswordResetView.as_view(),
+        PasswordResetView.as_view('users/password_reset_form.html'),
         name='password_reset'
     ),
 
     # Сообщение об отправке ссылки для восстановления пароля
     path(
         'password_reset/done/',
-        views.PasswordResetDoneView.as_view(),
+        PasswordResetDoneView.as_view('users/password_reset_done.html'),
         name='password_reset_done'
     ),
 
     # Вход по ссылке для восстановления пароля
     path(
         'reset/<uidb64>/<token>/',
-        views.PasswordResetConfirmView.as_view(),
+        PasswordResetConfirmView.as_view('users/password_reset_confirm.html'),
         name='password_reset_confirm'
         ),
 
     # Сообщение об успешном восстановлении пароля
     path('reset/done/',
-    views.PasswordResetCompleteView.as_view(),
+    PasswordResetCompleteView.as_view('users/password_reset_complete.html'),
     name='password_reset_complete'
     ),
 ]
