@@ -14,6 +14,8 @@
     {% for post in posts %}
       {% include 'includes/post_card.html'  %}
     {% endfor %}
-<!-- под последним постом нет линии -->
+    <!-- под последним постом нет линии -->
+    {% include 'includes/paginator.html' %}
+    
 </div>
 {% endblock %}
