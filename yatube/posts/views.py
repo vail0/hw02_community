@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 
-from .models import Group, Post
+from .models import Group, Post, User
 
 
 def index(request):
@@ -33,13 +33,29 @@ def group_posts(request, slug):
 
 def profile(request, username):
     # Здесь код запроса к модели и создание словаря контекста
+    author = get_object_or_404(User, username=username)
+    posts_auth = author.posts.all()
+    paginator = Paginator(posts_auth, 10)
+    # Из URL извлекаем номер запрошенной страницы - это значение параметра page
+    page_number = request.GET.get('page')
+    # Получаем набор записей для страницы с запрошенным номером
+    page_auth = paginator.get_page(page_number)
     context = {
+        'author':author,
+        'posts_auth':posts_auth,
+        'page_obj':page_auth,
+        # 'page_auth' не видит paginator
     }
     return render(request, 'posts/profile.html', context)
 
 
 def post_detail(request, post_id):
     # Здесь код запроса к модели и создание словаря контекста
+    post = get_object_or_404(Post, id=post_id)
+    post_30 = post.posts.all()
+    
     context = {
+        'post_30':post_30,
+
     }
     return render(request, 'posts/post_detail.html', context)
