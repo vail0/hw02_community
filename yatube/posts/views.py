@@ -65,17 +65,28 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
+    # Проверяем, получен POST-запрос или какой-то другой
     if request.method == "POST":
+        # Создаём объект формы класса ContactForm
+        # и передаём в него полученные данные
         form = PostForm(request.POST)
         if form.is_valid():
+            # Берём валидированные данные формы из словаря form.cleaned_data
             post = form.save(commit=False)
+            
+            # Берём валидированные данные формы из словаря form.cleaned_data
+
+            text = form.cleaned_data['text']
+            group = form.cleaned_data['group']
+            
             post.author = request.user
             post.save()
-            return redirect("posts:profile", request.user)
-        context = {
-            'form':form,
-        }
-    return render(request, "posts/create_post.html", context)
+            
+            return redirect("posts:profile")
+    # Если пришёл не POST-запрос - создаём и передаём в шаблон пустую форму
+    # пусть пользователь напишет что-нибудь
+    form = PostForm()
+    return render(request, "posts/create_post.html", {'form':form})
 
 def post_edit(request):
 
