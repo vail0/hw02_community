@@ -91,8 +91,7 @@ def post_create(request):
     # Если пришёл не POST-запрос - создаём и передаём в шаблон пустую форму
     # пусть пользователь напишет что-нибудь
     form = PostForm()
-    return render(request, "posts/create_post.html", {'form': form,
-                  "is_edit": False})
+    return render(request, "posts/create_post.html", {'form': form})
 
 
 @login_required
@@ -103,14 +102,19 @@ def post_edit(request, post_id):
     if post.author != request.user:
         return redirect('posts:index')
 
+    # form, в которой не стираются поля    
+    form = PostForm(
+    request.POST or None,
+    files=request.FILES or None,
+    instance=post
+    )
+    
     if request.method == "POST":
-        form = PostForm(request.POST)
+#        form = PostForm(request.POST)
 
         if form.is_valid():
             form.save()
             return redirect('posts:post_detail', post_id)
-
-
-
-    return render(request, "posts/post_create.html",
-                  {"form": form, "is_edit": is_edit, 'post' : post })
+#    form = PostForm()
+    return render(request, "posts/create_post.html",
+                  {"form": form, "is_edit": is_edit, 'post' : post})
