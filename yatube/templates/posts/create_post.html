@@ -22,8 +22,7 @@
         </div>
         <div class="card-body">        
           <form method="post" action="{% url 'posts:profile' request.user %}">
-            {% csrf_token %}
-            <input type="hidden" name="csrfmiddlewaretoken" value="">            
+            {% csrf_token %}           
             <div class="form-group row my-3 p-3">
               <label for="id_text">
                 Текст поста                  
