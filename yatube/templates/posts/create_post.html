@@ -27,7 +27,8 @@
           <form method="post" action="{% url 'posts:post_create' %}">
           {% endif %}
             {% csrf_token %}           
-
+          
+            
            <div class="form-group row my-3 p-3">
               <label for="id_text">
                 Текст поста                  
@@ -44,10 +45,12 @@
               <label for="id_group">
                 Группа                  
               </label>
+
               <select name="group" class="form-control" id="id_group">
                 <option value="" selected>---------</option>
                 <option value="1">Группа: Лев Толстой – зеркало русской революции</option>
               </select>
+              
               <small id="id_group-help" class="form-text text-muted">
                 Группа, к которой будет относиться пост
               </small>
