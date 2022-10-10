@@ -75,26 +75,43 @@ def post_detail(request, post_id):
 def post_create(request):
     # Проверяем, получен POST-запрос или какой-то другой
     if request.method == "POST":
-        # Создаём объект формы класса ContactForm
+        # Создаём объект формы класса PostForm
         # и передаём в него полученные данные
         form = PostForm(request.POST)
         if form.is_valid():
-
+            post = form.save(commit=False)
             # Берём валидированные данные формы из словаря form.cleaned_data
-            # text = form.cleaned_data['text']
-            # group = form.cleaned_data['group']
 
-            form.author = request.user
-            form.save()
+            post.author = request.user
+            post.save()
 
-            return redirect("posts:profile", request.user)
-        return render(request, "posts/create_post.html", {'form': form})
+            return redirect("posts:profile", post.author.username)
+        return render(request, "posts/create_post.html", {'form': form,
+                      "is_edit": False})
     # Если пришёл не POST-запрос - создаём и передаём в шаблон пустую форму
     # пусть пользователь напишет что-нибудь
     form = PostForm()
-    return render(request, "posts/create_post.html", {'form': form})
+    return render(request, "posts/create_post.html", {'form': form,
+                  "is_edit": False})
 
 
-def post_edit(request):
+@login_required
+def post_edit(request, post_id):
 
-    pass
+    post = get_object_or_404(Post, pk=post_id)
+
+    if post.author != request.user:
+        return redirect('posts:index')
+
+    if request.method == "POST":
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('posts:post_detail', post_id)
+
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, "posts/post_create.html",
+                  {"form": form, "is_edit": True})
