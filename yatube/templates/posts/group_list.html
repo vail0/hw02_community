@@ -11,7 +11,7 @@
     <p>
       {{ group.description }}
     </p>
-    {% for post in posts %}
+    {% for post in page_obj %}
       {% include 'includes/post_card.html'  %}
     {% endfor %}
     <!-- под последним постом нет линии -->

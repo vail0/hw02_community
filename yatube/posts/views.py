@@ -10,7 +10,7 @@ from .models import Group, Post, User
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.all()
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, settings.AMOUNT)
     # Из URL извлекаем номер запрошенной страницы - это значение параметра page
     page_number = request.GET.get('page')
     # Получаем набор записей для страницы с запрошенным номером
@@ -25,13 +25,21 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.filter(group=group)[:settings.AMOUNT]
+    posts = Post.objects.filter(group=group)
+    paginator = Paginator(posts, settings.AMOUNT)
+    # Из URL извлекаем номер запрошенной страницы - это значение параметра page
+    page_number = request.GET.get('page')
+    # Получаем набор записей для страницы с запрошенным номером
+    page_obj = paginator.get_page(page_number)
+
     template = 'posts/group_list.html'
     context = {
         'group': group,
         'posts': posts,
+        'page_obj': page_obj,
     }
     return render(request, template, context)
+
 
 def profile(request, username):
     # Здесь код запроса к модели и создание словаря контекста
@@ -44,9 +52,9 @@ def profile(request, username):
     # Получаем набор записей для страницы с запрошенным номером
     page_obj = paginator.get_page(page_number)
     context = {
-        'author':author,
-        'posts_auth':posts_auth,
-        'page_obj':page_obj,
+        'author': author,
+        'posts_auth': posts_auth,
+        'page_obj': page_obj,
     }
     return render(request, 'posts/profile.html', context)
 
@@ -54,10 +62,10 @@ def profile(request, username):
 def post_detail(request, post_id):
     # Здесь код запроса к модели и создание словаря контекста
     post = get_object_or_404(Post, pk=post_id)
-    posts_by = post.author.posts.all()    
+    posts_by = post.author.posts.all()
     context = {
-        'post':post,
-        'posts_by':posts_by,
+        'post': post,
+        'posts_by': posts_by,
 
     }
     return render(request, 'posts/post_detail.html', context)
@@ -71,24 +79,22 @@ def post_create(request):
         # и передаём в него полученные данные
         form = PostForm(request.POST)
         if form.is_valid():
-            # Берём валидированные данные формы из словаря form.cleaned_data
-            post = form.save(commit=False)
-            
-            # Берём валидированные данные формы из словаря form.cleaned_data
 
-            text = form.cleaned_data['text']
-            group = form.cleaned_data['group']
-            
-            post.author = request.user
-            post.save()
-            
-            return redirect("posts:profile")
+            # Берём валидированные данные формы из словаря form.cleaned_data
+            # text = form.cleaned_data['text']
+            # group = form.cleaned_data['group']
+
+            form.author = request.user
+            form.save()
+
+            return redirect("posts:profile", request.user)
+        return render(request, "posts/create_post.html", {'form': form})
     # Если пришёл не POST-запрос - создаём и передаём в шаблон пустую форму
     # пусть пользователь напишет что-нибудь
     form = PostForm()
-    return render(request, "posts/create_post.html", {'form':form})
+    return render(request, "posts/create_post.html", {'form': form})
+
 
 def post_edit(request):
 
     pass
-
