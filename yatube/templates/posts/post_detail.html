@@ -9,6 +9,7 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
               Дата публикации: {{ post.pub_date|date:"d E Y" }} 
+              {% url 'posts:post_edit' post.pk %}
             </li>
             <!-- если у поста есть группа -->  
             {% if post.group and not group %}
@@ -35,7 +36,7 @@
           <p>
            {{ post.text }}
           </p>
-          <a href="{% url 'posts:post_edit' %}">Изменить Пост</a>
+          <a href="{% url 'posts:post_edit' post.pk %}">Изменить Пост</a>
         </article>
       </div> 
 

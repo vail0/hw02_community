@@ -99,7 +99,7 @@ def post_create(request):
 def post_edit(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
-
+    is_edit = True
     if post.author != request.user:
         return redirect('posts:index')
 
@@ -110,8 +110,7 @@ def post_edit(request, post_id):
             form.save()
             return redirect('posts:post_detail', post_id)
 
-    else:
-        form = PostForm(instance=post)
+
 
     return render(request, "posts/post_create.html",
-                  {"form": form, "is_edit": True})
+                  {"form": form, "is_edit": is_edit, 'post' : post })
